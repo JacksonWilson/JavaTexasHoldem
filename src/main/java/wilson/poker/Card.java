@@ -22,6 +22,7 @@ public class Card {
 		Rank(int value) {
 			this(value, Integer.toString(value));
 		}
+
 		Rank(int value, String initial) {
 			this.value = value;
 			this.initial = initial;
@@ -37,18 +38,18 @@ public class Card {
 	}
 	
 	enum Suit {
-		HEARTS('H'),
-		DIAMONDS('D'),
-		SPADES('S'),
-		CLUBS('C');
+		HEARTS("H"),
+		DIAMONDS("D"),
+		SPADES("S"),
+		CLUBS("C");
 		
-		private char inital;
+		private String inital;
 		
-		Suit(char inital) {
+		Suit(String inital) {
 			this.inital = inital;
 		}
 		
-		public char getInitial() {
+		public String getInitial() {
 			return inital;
 		}
 	}
@@ -84,9 +85,8 @@ public class Card {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Card) {
-			return ((Card)obj).rank.equals(this.rank) && ((Card)obj).suit.equals(this.suit);
-		}
-		return false;
+		return obj instanceof Card
+			&& ((Card)obj).rank.equals(this.rank)
+			&& ((Card)obj).suit.equals(this.suit);
 	}
 }

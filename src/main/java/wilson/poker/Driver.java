@@ -7,12 +7,21 @@ import java.util.Scanner;
 public class Driver {
 	public static Scanner scanner = new Scanner(System.in);
 
+	/*
+		visibilty_modifier return_type name(type1 param1, typ2 param2) {
+
+
+		}
+
+	*/
+
 	public static void main(String[] args) {
 		List<Player> players = new ArrayList<>();
 		
-		boolean ready = true;
+		boolean ready = false;
 		boolean validInput;
 		String input = null;
+		int playerNum;
 
 		if (ready) {
 			players.add(new Player("Jackson", 200));
@@ -24,7 +33,7 @@ public class Driver {
 
 		while (!ready) {
 			validInput = false;
-			int playerNum = players.size() + 1;
+			playerNum = players.size() + 1;
 			
 			do {
 				if (players.size() < 2) {
@@ -32,6 +41,7 @@ public class Driver {
 				} else {
 					System.out.print("Enter Player " + playerNum + "\'s name (or press [Enter] to begin): ");
 				}
+
 				if (scanner.hasNextLine())
 					input = scanner.nextLine();
 
@@ -58,10 +68,10 @@ public class Driver {
 					if (!input.isEmpty()) {
 						try {
 							playerStartMoney = Double.parseDouble(input);
-							if (playerStartMoney > 0.0) {
+							if (playerStartMoney >= Game.BIG_BLIND) {
 								validInput = true;
 							} else {
-								System.out.println("\tStarting money must be positive.");
+								System.out.println("\tStarting money must be at least $" + Game.BIG_BLIND + ".");
 							}
 						} catch (NumberFormatException e) {
 							System.out.println("\tStarting money must be a number.");

@@ -6,7 +6,7 @@ public class Pot {
 	private double amount;
 	
 	public Pot() {
-		this.setAmount(0.0);
+		this.amount = 0.0;
 	}
 	
 	public void split(List<Player> players) {

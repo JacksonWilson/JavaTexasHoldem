@@ -1,5 +1,6 @@
 package wilson.poker;
 
+import java.text.NumberFormat;
 import java.util.Scanner;
 
 public class Player {
@@ -38,8 +39,10 @@ public class Player {
 	
 	public double pay(double amount) {
 		double ret = money > amount ? amount : money;
-		if (money < amount)
+		if (money < amount) {
 			folded = true;
+			return 0;
+		}
 		money -= ret;
 		return ret;
 	}
@@ -79,7 +82,7 @@ public class Player {
 	
 	@Override
 	public String toString() {
-		return name + " ($" + money + "|"+ currentBet + "):" + " [" + hand[0] + ", " + hand[1] + "] " + (folded ? "X" : "");
+		return name + " (" + NumberFormat.getCurrencyInstance().format(money) + "|"+ NumberFormat.getCurrencyInstance().format(currentBet) + "):" + " [" + hand[0] + ", " + hand[1] + "] " + (folded ? "X" : "");
 	}
 	
 	public enum BetResponse {

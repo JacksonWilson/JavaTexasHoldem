@@ -1,5 +1,6 @@
 package wilson.poker;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,7 +9,6 @@ public class Game {
 	public static final double SMALL_BLIND = 10;
 	public static final double BIG_BLIND = SMALL_BLIND * 2;
 	private Double currentBet;
-	private int handNum;
 	private int buttonPlayer;
 	private int currentPlayer;
 	private Pot pot;
@@ -17,24 +17,15 @@ public class Game {
 	private Deck deck;
 
 	public Game() {
-		this.handNum = 1;
 		this.currentPlayer = this.buttonPlayer = 0;
 		this.pot = new Pot();
-		this.setDeck(new Deck());
+		this.deck = new Deck();
 		this.communityCards = new ArrayList<>();
 	}
 	
 	public Game(List<Player> initialPlayers) {
 		this();
 		this.players = initialPlayers;
-	}
-	
-	public int getHandNum() {
-		return handNum;
-	}
-
-	public void setHandNum(int handNum) {
-		this.handNum = handNum;
 	}
 
 	public Pot getPot() {
@@ -53,10 +44,6 @@ public class Game {
 	
 	private Player getCurrentPlayer() {
 		return players.get(currentPlayer);
-	}
-
-	private int getCurrentPlayerIndex() {
-		return currentPlayer;
 	}
 	
 	private Player getButtonPlayer() {
@@ -87,7 +74,7 @@ public class Game {
 		String ret = "Players: {\n";
 		
 		for (Player p : players) {
-			ret += "\t" + (p.equals(getCurrentPlayer()) ? "> " : "")  + p + (p.equals(getButtonPlayer()) ? "(Button)" : "") + "\n";
+			ret += "\t" + (p.equals(getCurrentPlayer()) ? "> " : "")  + p.toString() + (p.equals(getButtonPlayer()) ? "(Button)" : "") + "\n";
 		}
 		ret += "}";
 
@@ -103,7 +90,7 @@ public class Game {
 			}
 			ret = ret.substring(0, ret.length() - 2);
 		}
-		ret += "]\nCurrent Pot|Bet: $" + pot.getAmount() + "|" + currentBet + "\n" + playersToString();
+		ret += "]\nCurrent Pot|Bet: " + NumberFormat.getCurrencyInstance().format(pot.getAmount()) + "|" + NumberFormat.getCurrencyInstance().format(currentBet) + "\n" + playersToString();
 		
 		return ret;
 	}
@@ -131,7 +118,8 @@ public class Game {
 		do {
 			if (getNextPlayer().isFolded())
 				continue;
-			System.out.println(this);
+			System.out.println(toString());
+
 			switch (getCurrentPlayer().getBetResponse(currentBet)) {
 			case CALL:
 				pot.add(getCurrentPlayer().payBet(currentBet));
@@ -144,13 +132,13 @@ public class Game {
 			case CHECK:
 				break;
 			}
-		System.out.println("\n");
+			System.out.println("\n");
 		} while (!doneBetting());
 	}
 	
 	// All of the game logic is here.
 	public void start() {
-		printHeader("Texas Holdem: Game " + handNum);
+		printHeader("Texas Holdem");
 		currentBet = BIG_BLIND;
 		
 		pot.add(getNextPlayer().payBet(SMALL_BLIND)); // small blind
